@@ -1,0 +1,6 @@
+.product-toolbar { display: flex; align-items: flex-end; gap: 12px; flex-wrap: wrap; margin-bottom: 18px; }
+.search-field { position: relative; flex: 1 1 220px; }
+.search-field svg { position: absolute; left: 10px; bottom: 10px; color: #65776d; }
+.search-field input { padding-left: 35px; }
+.category-field { width: 180px; }
+@media (max-width: 600px) { .product-toolbar { width: 100%; } .search-field { flex-basis: 100%; } .category-field { flex: 1; min-width: 0; } }

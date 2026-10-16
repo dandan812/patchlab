@@ -1,0 +1,58 @@
+name: patchlab
+services:
+  postgres:
+    image: postgres:17-bookworm
+    environment:
+      POSTGRES_DB: patchlab
+      POSTGRES_USER: patchlab
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD}
+    ports: ['127.0.0.1:5432:5432']
+    volumes: ['postgres-data:/var/lib/postgresql/data']
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U patchlab']
+      interval: 5s
+      timeout: 3s
+      retries: 15
+    restart: unless-stopped
+  api:
+    build: { context: .., dockerfile: infra/Dockerfile }
+    image: patchlab-app:local
+    network_mode: host
+    user: '1000:1000'
+    environment:
+      DATABASE_URL: postgres://patchlab:${POSTGRES_PASSWORD}@127.0.0.1:5432/patchlab
+      PATCHLAB_DATA: /data
+      PATCHLAB_HOST: 127.0.0.1
+      PATCHLAB_PORT: 4310
+      PATCHLAB_SANDBOX: docker
+      PATCHLAB_ADMIN_PASSWORD: ${PATCHLAB_ADMIN_PASSWORD:?set admin password}
+      PATCHLAB_SESSION_SECRET: ${PATCHLAB_SESSION_SECRET:?set session secret}
+      PATCHLAB_SECURE_COOKIE: ${PATCHLAB_SECURE_COOKIE:-false}
+      MODEL_ID: ${MODEL_ID:-}
+      MODEL_API_KEY: ${MODEL_API_KEY:-}
+    volumes: ['${PATCHLAB_HOST_DATA:?set absolute host data path}:/data']
+    depends_on: { postgres: { condition: service_healthy } }
+    restart: unless-stopped
+  worker:
+    image: patchlab-app:local
+    network_mode: host
+    command: ['node', '--import', 'tsx', 'apps/worker/src/index.ts']
+    environment:
+      DATABASE_URL: postgres://patchlab:${POSTGRES_PASSWORD}@127.0.0.1:5432/patchlab
+      PATCHLAB_DATA: /data
+      PATCHLAB_HOST_DATA: ${PATCHLAB_HOST_DATA}
+      PATCHLAB_SANDBOX: docker
+      PATCHLAB_SANDBOX_IMAGE: patchlab-fixture:local
+      MODEL_API_KEY: ${MODEL_API_KEY:-}
+      MODEL_BASE_URL: ${MODEL_BASE_URL:-}
+      MODEL_ID: ${MODEL_ID:-}
+      MODEL_INPUT_PRICE: ${MODEL_INPUT_PRICE:-}
+      MODEL_OUTPUT_PRICE: ${MODEL_OUTPUT_PRICE:-}
+      PLAYWRIGHT_BROWSERS_PATH: /opt/browsers
+    volumes:
+      - '${PATCHLAB_HOST_DATA}:/data'
+      - '/var/run/docker.sock:/var/run/docker.sock'
+    depends_on: { postgres: { condition: service_healthy }, api: { condition: service_started } }
+    restart: unless-stopped
+volumes:
+  postgres-data:

@@ -1,0 +1,93 @@
+name: patchlab-us
+services:
+  postgres:
+    image: ${PATCHLAB_POSTGRES_IMAGE:?set verified PostgreSQL image}
+    pull_policy: never
+    environment:
+      POSTGRES_DB: patchlab
+      POSTGRES_USER: patchlab
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set password}
+    command:
+      ['postgres', '-c', 'shared_buffers=32MB', '-c', 'max_connections=25', '-c', 'work_mem=2MB']
+    ports: ['127.0.0.1:55432:5432']
+    volumes: ['postgres-data:/var/lib/postgresql/data']
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U patchlab -d patchlab']
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    cgroup_parent: patchlab.slice
+    cpus: 0.25
+    mem_limit: 256m
+    pids_limit: 128
+    restart: unless-stopped
+    logging: { driver: json-file, options: { max-size: '10m', max-file: '3' } }
+  api:
+    image: ${PATCHLAB_APP_IMAGE:?set verified application image}
+    pull_policy: never
+    network_mode: host
+    user: '1000:1000'
+    environment:
+      DATABASE_URL: postgres://patchlab:${POSTGRES_PASSWORD}@127.0.0.1:55432/patchlab
+      PATCHLAB_DATA: /data
+      PATCHLAB_HOST: 127.0.0.1
+      PATCHLAB_PORT: 4310
+      PATCHLAB_SANDBOX: docker
+      PATCHLAB_ADMIN_PASSWORD: ${PATCHLAB_ADMIN_PASSWORD:?set password}
+      PATCHLAB_SESSION_SECRET: ${PATCHLAB_SESSION_SECRET:?set secret}
+      PATCHLAB_SECURE_COOKIE: 'true'
+    volumes: ['${PATCHLAB_HOST_DATA:?set absolute host data path}:/data']
+    read_only: true
+    tmpfs: ['/tmp:rw,nosuid,noexec,size=67108864']
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    healthcheck:
+      test:
+        [
+          'CMD',
+          'node',
+          '-e',
+          "fetch('http://127.0.0.1:4310/api/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    depends_on: { postgres: { condition: service_healthy } }
+    cgroup_parent: patchlab.slice
+    cpus: 0.25
+    mem_limit: 192m
+    pids_limit: 64
+    restart: unless-stopped
+    logging: { driver: json-file, options: { max-size: '10m', max-file: '3' } }
+  worker:
+    image: ${PATCHLAB_APP_IMAGE}
+    pull_policy: never
+    network_mode: host
+    command: ['node', '--import', 'tsx', 'apps/worker/src/index.ts']
+    environment:
+      DATABASE_URL: postgres://patchlab:${POSTGRES_PASSWORD}@127.0.0.1:55432/patchlab
+      PATCHLAB_DATA: /data
+      PATCHLAB_HOST_DATA: ${PATCHLAB_HOST_DATA}
+      PATCHLAB_SANDBOX: docker
+      PATCHLAB_SANDBOX_IMAGE: ${PATCHLAB_FIXTURE_IMAGE:?set verified fixture image}
+      PATCHLAB_INSTANCE_ID: us-production
+      PATCHLAB_CGROUP_PARENT: patchlab.slice
+      PLAYWRIGHT_BROWSERS_PATH: /opt/browsers
+    volumes:
+      - '${PATCHLAB_HOST_DATA}:/data'
+      - '/var/run/docker.sock:/var/run/docker.sock'
+    read_only: true
+    tmpfs: ['/tmp:rw,nosuid,size=536870912']
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    shm_size: 128m
+    depends_on: { postgres: { condition: service_healthy }, api: { condition: service_healthy } }
+    cgroup_parent: patchlab.slice
+    cpus: 0.75
+    mem_limit: 768m
+    pids_limit: 256
+    stop_grace_period: 30s
+    restart: unless-stopped
+    logging: { driver: json-file, options: { max-size: '10m', max-file: '3' } }
+volumes:
+  postgres-data:

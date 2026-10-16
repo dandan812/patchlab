@@ -1,0 +1,12 @@
+.git
+node_modules
+data
+dist
+coverage
+**/.qa
+*.log
+.env
+.env.*
+infra/deployment.env
+**/__pycache__
+**/*.pyc

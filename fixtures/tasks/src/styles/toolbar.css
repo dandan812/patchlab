@@ -1,0 +1,6 @@
+.task-toolbar { display: flex; align-items: flex-end; gap: 12px; flex-wrap: wrap; }
+.task-toolbar > label { flex: 0 1 140px; min-width: 0; }
+.task-toolbar .task-search { position: relative; flex: 1 1 210px; }
+.task-search svg { position: absolute; left: 10px; bottom: 10px; color: #66717e; }
+.task-search input { padding-left: 35px; }
+@media (max-width: 600px) { .task-toolbar > label { flex: 1 1 100px; } .task-toolbar .task-search { flex: 1 1 100%; min-width: 0; } .task-toolbar > button { margin-left: auto; } }

@@ -1,0 +1,10 @@
+.modal-backdrop { position: fixed; inset: 0; background: #142b2466; display: flex; align-items: center; justify-content: center; padding: 16px; z-index: 20; }
+.product-editor { background: #fff; border-radius: 6px; padding: 22px; width: 480px; max-width: 100%; max-height: calc(100dvh - 32px); overflow-y: auto; }
+.dialog-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 18px; }
+.dialog-heading button { width: 36px; padding: 7px; }
+.product-editor form { display: grid; gap: 14px; }
+.form-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.dialog-actions { display: flex; justify-content: flex-end; gap: 10px; padding-top: 10px; }
+[role=alert] { color: #a23535; font-size: 13px; }
+textarea { resize: vertical; }
+@media (max-width: 600px) { .product-editor { padding: 18px; } }

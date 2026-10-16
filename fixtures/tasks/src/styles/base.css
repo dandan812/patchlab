@@ -1,0 +1,31 @@
+:root { font-family: "Segoe UI", sans-serif; color: #272d34; background: #f5f6f8; font-synthesis: none; letter-spacing: 0; }
+* { box-sizing: border-box; }
+body { margin: 0; }
+button, input, select, textarea { font: inherit; }
+button { border: 1px solid #ccd2db; background: #fff; color: #272d34; border-radius: 5px; min-height: 36px; padding: 7px 12px; display: inline-flex; align-items: center; justify-content: center; gap: 7px; cursor: pointer; }
+button:hover { background: #edf0f4; }
+button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible { outline: 3px solid #d59928; outline-offset: 2px; }
+button.primary { background: #3d536d; border-color: #3d536d; color: #fff; }
+input, select, textarea { border: 1px solid #bdc5d0; border-radius: 4px; background: white; color: #272d34; min-height: 36px; padding: 8px 10px; width: 100%; min-width: 0; }
+label { font-size: 13px; font-weight: 600; display: grid; gap: 6px; }
+h1, h2, h3, h4, p { margin: 0; }
+h1 { font-size: 28px; font-weight: 650; }
+h2 { font-size: 17px; font-weight: 650; }
+.app-header { display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 66px; padding: 14px 28px; border-bottom: 1px solid #d9dfe6; background: #fff; }
+.brand { display: flex; align-items: center; gap: 10px; font-size: 21px; font-weight: 700; }
+.brand svg { color: #3d536d; }
+.workspace, .eyebrow { color: #66717e; font-size: 12px; }
+main { max-width: 1240px; padding: 30px 28px; margin: auto; }
+.page-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 24px; }
+.eyebrow { margin-bottom: 5px; }
+.metrics { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); padding: 18px 0; border-top: 1px solid #d9dfe6; border-bottom: 1px solid #d9dfe6; margin-bottom: 20px; gap: 16px; }
+.metrics div { display: grid; gap: 6px; }
+.metrics span { color: #66717e; font-size: 12px; }
+.metrics strong { font-size: 21px; font-variant-numeric: tabular-nums; }
+.metrics .overdue-count { color: #aa3939; }
+.metrics .reporting-date { font-size: 16px; align-self: center; }
+.board-heading { display: flex; align-items: center; justify-content: space-between; margin: 22px 0 14px; }
+.board-heading span { color: #66717e; font-size: 12px; }
+.notice { color: #3d536d; font-size: 13px; min-height: 22px; padding-top: 16px; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+@media (max-width: 600px) { main { padding: 22px 16px; } .app-header { padding: 14px 16px; } .workspace { display: none; } .metrics { grid-template-columns: 1fr 1fr; } }

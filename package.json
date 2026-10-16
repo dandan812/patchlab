@@ -1,0 +1,50 @@
+{
+  "name": "patchlab",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.12"
+  },
+  "scripts": {
+    "dev": "tsx scripts/dev.ts",
+    "web": "vite --config apps/web/vite.config.ts",
+    "api": "tsx apps/api/src/index.ts",
+    "worker": "tsx apps/worker/src/index.ts",
+    "build": "vite build --config apps/web/vite.config.ts",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "typecheck": "tsc --noEmit && vue-tsc --noEmit -p apps/web/tsconfig.json",
+    "check": "npm run format:check && npm run typecheck && npm test && npm run build",
+    "test": "tsx --test tests/*.test.ts",
+    "model:check": "tsx scripts/model-check.ts",
+    "fixtures:verify": "tsx scripts/verify-fixtures.ts",
+    "eval": "tsx evaluations/run.ts",
+    "qa": "tsx scripts/qa.ts",
+    "browser:install": "playwright install chromium",
+    "start": "tsx apps/api/src/index.ts"
+  },
+  "dependencies": {
+    "@ai-sdk/openai": "4.0.82",
+    "ai": "7.0.123",
+    "diff": "^8.0.2",
+    "express": "^5.1.0",
+    "lucide-vue-next": "^0.468.0",
+    "pg": "^8.16.3",
+    "playwright": "1.63.0",
+    "vue": "3.5.43",
+    "zod": "^4.1.0"
+  },
+  "devDependencies": {
+    "@types/diff": "^7.0.2",
+    "@types/express": "^5.0.3",
+    "@types/node": "^24.0.0",
+    "@types/pg": "^8.15.5",
+    "@vitejs/plugin-vue": "^6.0.0",
+    "prettier": "3.8.1",
+    "tsx": "^4.20.5",
+    "typescript": "^5.9.2",
+    "vite": "8.3.1",
+    "vue-tsc": "^3.0.0"
+  }
+}

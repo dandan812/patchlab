@@ -1,0 +1,9 @@
+.table-scroll { width: 100%; overflow-x: auto; background: #fff; border-top: 1px solid #d1ddd5; border-bottom: 1px solid #d1ddd5; }
+table { border-collapse: collapse; width: 100%; min-width: 790px; text-align: left; font-size: 13px; }
+th { color: #65776d; font-weight: 600; font-size: 12px; background: #f8faf8; }
+td, th { padding: 13px 12px; border-bottom: 1px solid #e6ece8; }
+td strong { font-weight: 600; }
+td small { display: block; margin-top: 4px; font-size: 11px; color: #65776d; }
+tbody tr:last-child td { border-bottom: 0; }
+.row-actions { display: flex; gap: 6px; }
+.row-actions button { width: 34px; padding: 7px; }

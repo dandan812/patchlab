@@ -1,0 +1,12 @@
+[Unit]
+Description=PatchLab aggregate resource boundary
+
+[Slice]
+CPUQuota=150%
+MemoryHigh=2000M
+MemoryMax=2300M
+MemorySwapMax=256M
+TasksMax=512
+
+[Install]
+WantedBy=multi-user.target

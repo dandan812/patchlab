@@ -1,0 +1,10 @@
+patchlab.i-tool-chat.store {
+    header Strict-Transport-Security "max-age=31536000"
+    header X-Robots-Tag "noindex, nofollow"
+    request_body {
+        max_size 32KB
+    }
+    reverse_proxy 127.0.0.1:4310 {
+        flush_interval -1
+    }
+}

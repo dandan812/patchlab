@@ -1,0 +1,16 @@
+node_modules/
+data/
+dist/
+coverage/
+playwright-report/
+test-results/
+.qa/
+*.log
+.env
+.env.*
+!.env.example
+infra/deployment.env
+__pycache__/
+*.pyc
+*.pem
+*.key
