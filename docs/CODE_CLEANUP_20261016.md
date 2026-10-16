@@ -67,7 +67,9 @@ Worker 租约、SSE 游标、刷新锁或不同的繁忙状态。它们分别保
 浏览器测试使用独立 API、Worker 和本地已审核回放，未调用收费模型。
 工程核验覆盖代表性成功与失败链路，没有重跑全部 20 组缺陷/参考版本的 40 次执行，
 没有验证 Docker / PostgreSQL 部署或真实模型效果。
-CI 的 Linux / Node 24.21.0 与本机环境不同，远端 CI 结果需另行查看。
+CI 的 Linux / Node 24.21.0 与本机环境不同。首次推送的工作流在创建 job 前失败：
+`runner.temp` 不允许出现在 job 级 `env`。随后将该设置移入检查步骤的 `env`，
+再次推送验证；本地业务检查不受此 CI 配置修正影响。
 
 日志在工作区 `refactor-backups/patchlab-final-check.log`、
 `patchlab-engineering-check.log`、`patchlab-browser-check.log`；
